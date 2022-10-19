@@ -37,6 +37,75 @@ public class LEDClient {
             TimeUnit.MILLISECONDS.sleep(miliseconds);
         }
     }
+    public void Fade2Red(int red, int green, int blue, int times, int miliseconds) throws InterruptedException{
+        for (int i=0; i<times; i++) {
+            if (red < 250) {
+                red += 5;
+            }
+            if (blue > 5) {
+                blue-=5;
+            }
+            if (green > 5) {
+                green-=5;
+            }
+            int[] color1 = {red,green,blue};
+            send(color1);
+            TimeUnit.MILLISECONDS.sleep(miliseconds);
+        }
+        send(LEDClient.OFF);
+    }
+    public void RainbowFade(int spd) throws InterruptedException {
+        //ROYGBIV
+        int red=0;
+        int green=0;
+        int blue=0;
+        //fade2red
+        for (int i=0;i<255;i+=spd) {
+            red = i;
+            green = 0;
+            blue = 0;
+            int[] color1 = {red,green,blue};
+            send(color1);
+            TimeUnit.MILLISECONDS.sleep(100);
+        }
+        //fade out of red and into green
+        for (int i=0;i<255;i+=spd) {
+            red=255-i;
+            green=i;
+            blue=0;
+            int[] color2 = {red,green,blue};
+            send(color2);
+            TimeUnit.MILLISECONDS.sleep(100);
+        }
+        //fade out of green and into blue
+        for (int i=0;i<255;i+=spd) {
+            red=0;
+            green=255-i;
+            blue=i;
+            int[] color3 = {red,green,blue};
+            send(color3);
+            TimeUnit.MILLISECONDS.sleep(100);
+        }
+        //fade out of blue and into purple
+        for (int i=0;i<150;i+=spd) {
+            red=i;
+            green=0;
+            blue=255-i;
+            int[] color4 = {red,green,blue};
+            send(color4);
+            TimeUnit.MILLISECONDS.sleep(100);
+        }
+        //fade out of purple
+        for (int i=0;i<125;i+=spd) {
+            red=125-i;
+            green=0;
+            blue=125-i;
+            int[] color5 = {red,green,blue};
+            send(color5);
+            TimeUnit.MILLISECONDS.sleep(100);
+        }
+        send(LEDClient.OFF);
+    }
 
     public void close() throws InterruptedException {
         TimeUnit.SECONDS.sleep(2); // Allow the socket a chance to flush.
@@ -46,9 +115,16 @@ public class LEDClient {
 
     public static void main(String[] args) {
         LEDClient ledClient = new LEDClient("tcp", "192.168.86.250", 5001);
+       /* try {
+            //int[] color = {0, 0, 255};
+            ledClient.Fade2Red(0, 5, 250, 50, 50);
+            ledClient.close();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }*/
         try {
-            int[] color = {0, 0, 255};
-            ledClient.blinkN(color, 5, 1000);
+            //int[] color = {0, 0, 255};
+            ledClient.RainbowFade(10);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
