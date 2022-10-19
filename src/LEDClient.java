@@ -30,12 +30,41 @@ public class LEDClient {
     }
 
     public void blinkN(int[] color, int times, int miliseconds) throws  InterruptedException{
+        int o = 0;
+        int p = 0;
         for(int i=0; i<times; i++) {
-            send(color);
-            TimeUnit.MILLISECONDS.sleep(miliseconds);
-            send(LEDClient.OFF);
-            TimeUnit.MILLISECONDS.sleep(miliseconds);
+            if (i%2 == 0 && i>0){
+                o++;
+            }
+            if(i%3 == 0 && i>0){
+                p++;
+            }
+            int[] newColors = {i, o, p};
+            send(newColors);
+            TimeUnit.MILLISECONDS.sleep(30);
         }
+        send(LEDClient.OFF);
+        color[0] = 255;
+        System.out.println(color[0]);
+        for( int i=0; i<20; i++){
+            if (color[1] == 255){
+                color[2] = 255;
+                color[0] = 0;
+                color[1] = 0;
+                send(color);
+            } else if(color[2] == 255){
+                color[0] = 255;
+                color[1] = 0;
+                color[2] = 0;
+                send(color);
+            } else if(color[0] == 255){
+                color[1] = 255;
+                color[2] = 0;
+                color[0] = 0;
+                send(color);
+            }
+            TimeUnit.MILLISECONDS.sleep(500);
+        } send(LEDClient.OFF);
     }
 
     public void close() throws InterruptedException {
@@ -48,7 +77,7 @@ public class LEDClient {
         LEDClient ledClient = new LEDClient("tcp", "192.168.86.250", 5001);
         try {
             int[] color = {0, 0, 255};
-            ledClient.blinkN(color, 5, 1000);
+            ledClient.blinkN(color, 255, 0);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
