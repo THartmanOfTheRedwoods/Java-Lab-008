@@ -29,14 +29,64 @@ public class LEDClient {
         zsocket.send(message);
     }
 
-    public void blinkN(int[] color, int times, int miliseconds) throws  InterruptedException{
-        for(int i=0; i<times; i++) {
-            send(color);
-            TimeUnit.MILLISECONDS.sleep(miliseconds);
-            send(LEDClient.OFF);
-            TimeUnit.MILLISECONDS.sleep(miliseconds);
-        }
-    }
+    //public void blinkN(int[] color, int times, int miliseconds) throws  InterruptedException{
+       // for(int i=0; i<times; i++) {
+          //  send(color);
+           // TimeUnit.MILLISECONDS.sleep(miliseconds);
+           // send(LEDClient.OFF);
+            //TimeUnit.MILLISECONDS.sleep(miliseconds);
+       // }
+        public void fadingLights(int[] color, int times, int miliseconds) throws  InterruptedException {
+            int x = 0;
+            int redCycle = 0;
+            int greenCycle = 0;
+            int blueCycle = 0;
+            for (int i = 0; i < times; i++) {
+                if (color[0] < 255 && redCycle != 2) {
+                    for (; color[0] < 255; color[0]++) {
+
+                        send(color);
+                        TimeUnit.MILLISECONDS.sleep(miliseconds);
+                        System.out.println(color);
+                    }
+                    for (; color[0] > 0; color[0]--) {
+                        send(color);
+                        TimeUnit.MILLISECONDS.sleep(miliseconds);
+                        System.out.println(color);
+                    }
+                    redCycle += 1;
+                }
+                if (color[1] < 255 && greenCycle != 2) {
+                    for (; color[1] < 255; color[1]++) {
+
+                        send(color);
+                        TimeUnit.MILLISECONDS.sleep(miliseconds);
+                        System.out.println(color);
+                    }
+                    for (; color[1] > 0; color[1]--) {
+                        send(color);
+                        TimeUnit.MILLISECONDS.sleep(miliseconds);
+                        System.out.println(color);
+                    }
+                    greenCycle += 1;
+                }
+                if (color[2] < 255 && blueCycle != 2) {
+                    for (; color[2] < 255; color[2]++) {
+
+                        send(color);
+                        TimeUnit.MILLISECONDS.sleep(miliseconds);
+                        System.out.println(color);
+                    }
+                    for (; color[2] > 0; color[2]--) {
+                        send(color);
+                        TimeUnit.MILLISECONDS.sleep(miliseconds);
+                        System.out.println(color);
+                    }
+                    blueCycle += 1;
+                }
+                }
+            }
+
 
     public void close() throws InterruptedException {
         TimeUnit.SECONDS.sleep(2); // Allow the socket a chance to flush.
@@ -47,8 +97,8 @@ public class LEDClient {
     public static void main(String[] args) {
         LEDClient ledClient = new LEDClient("tcp", "192.168.86.250", 5001);
         try {
-            int[] color = {0, 0, 255};
-            ledClient.blinkN(color, 5, 1000);
+            int[] color = {0, 0, 0};
+            ledClient.fadingLights(color, 1, 15);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
