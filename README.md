@@ -50,7 +50,7 @@ A(m,n) = | A(m − 1, 1)           if m > 0 and n = 0
       * Test your implementation of Ackermann by invoking it from main and displaying the return value.
           * Note the return value gets very big very quickly. You should try it only for small values of m and n (not bigger than 3).
         
-3. Write a recursive method called **power** that takes a double x and an integer n and returns xn.
+3. Write a recursive method called **power** that takes a double x and an integer n and returns $$x^n$$.
     * Hint: A recursive definition of this operation is $$x^n = x \cdot x^{(n-1)}$$
     * Also, remember that anything raised to the zeroth power is 1.
     * Optional challenge: you can make this method more efficient, when n is even, using $$x^n = \left(x^{\frac{n}{2}}\right)^2$$
